@@ -1,27 +1,53 @@
+/*
+  74LS161a replacement
+  4-bit binary counter
+  for Coursera course: Hardware Description Languages
+
+  D:        Parallel Input
+  CLK:      Clock
+  CLR_n:    Asynchronous Reset (LOW)
+  LOAD_n:   Enable Parallel Input (LOW)
+  ENP:      Count Enable Parallel
+  ENT:      Count Enable Trickle
+  Q:        Parallel Output
+  RCO:      Ripple Carry Output (Terminal Count)
+
+*/
 module LS161a(
-    input [3:0] D,        // Parallel Input
-    input CLK,            // Clock
-    input CLR_n,          // Active Low Asynchronous Reset
-    input LOAD_n,         // Enable Parallel Input
-    input ENP,            // Count Enable Parallel
-    input ENT,            // Count Enable Trickle
-    output [3:0]Q,        // Parallel Output
-    output RCO            // Ripple Carry Output (Terminal Count)
+    input [3:0] D,
+    input CLK,
+    input CLR_n,
+    input LOAD_n,
+    input ENP,
+    input ENT,
+    output RCO,
+    output [3:0]Q
 );
+  reg [4:0] CNT;
 
-reg [3:0] temp;
-always @(posedge CLK or posedge CLR_n)
-begin
-  if(CLK == 1 & CLR_n == 0) // active-low clear
-    temp <= 4'b0000;
-  else if(CLK == 1)
-    if (LOAD_n == 0)
-      temp = D;
-    else if (LOAD_n == 0 & ENT == 1 & ENP == 1)
-      temp = temp + 4'b0001;
+  assign Q = CNT[3:0];
+
+  assign RCO = CNT[4];
+
+  always @(posedge CLK or negedge LOAD_n) begin
+    if (!LOAD_n) begin
+      $display("!LOAD_n: D %d Q %d", D, Q);
+      CNT = D;
     end
-    assign D = temp;
-    assign RCO = temp[0] & temp[1] & temp[2] & temp[3] * ENT;
+  end
 
-
+  always @(posedge CLK or posedge CLR_n) begin
+    if (!CLR_n) begin
+      CNT <= 0;
+    end
+    else begin
+      if (ENP) begin
+        CNT++;
+        $display("%b", CNT);
+      end
+      if(CNT > 5'b10000) begin
+        CNT <= 0;
+      end
+    end
+  end
 endmodule
