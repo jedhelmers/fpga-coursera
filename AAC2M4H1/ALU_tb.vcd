@@ -1,0 +1,17 @@
+$date
+	Sun Mar 27 22:07:41 2022
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	10ps
+$end
+$scope module ALU_tb $end
+$var reg 1 ! clk $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+0!
+$end
