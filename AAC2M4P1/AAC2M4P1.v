@@ -42,7 +42,7 @@ module LS161a(
     end
     else begin
       if (ENP) begin
-        CNT++;
+        CNT = CNT + 1;
         $display("%b", CNT);
       end
       if(CNT > 5'b10000) begin
