@@ -31,22 +31,22 @@ module LS161a(
 
   always @(posedge CLK or negedge LOAD_n) begin
     if (!LOAD_n) begin
-      $display("!LOAD_n: D %d Q %d", D, Q);
+      // $display("!LOAD_n: D %d Q %d", D, Q);
       CNT = D;
     end
   end
 
   always @(posedge CLK or posedge CLR_n) begin
     if (!CLR_n) begin
-      CNT <= 0;
+      CNT = 0;
     end
     else begin
       if (ENP) begin
         CNT = CNT + 1;
-        $display("%b", CNT);
+        // $display("%b", CNT);
       end
       if(CNT > 5'b10000) begin
-        CNT <= 0;
+        CNT = 0;
       end
     end
   end
