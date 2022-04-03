@@ -12,6 +12,7 @@ module FIFO8x9(
 	reg [7:0] wrptr, rdptr;
 	wire [7:0] wr_cnt, rd_cnt;
 
+	integer i = 0;
   assign wr_cnt = wrptr;
   assign rd_cnt = rdptr;
   assign DataOut = rden ? fifo_array[rd_cnt] : 9'bzzzzzzz;
@@ -27,7 +28,7 @@ module FIFO8x9(
   always @(rst) begin
     rdptr <= 0;
     wrptr <= 0;
-    for(integer i = 0; i < 256; i = i + 1) begin
+    for(i = 0; i < 256; i = i + 1) begin
       fifo_array[i] <= 9'b000000000;
     end
   end
