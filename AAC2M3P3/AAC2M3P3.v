@@ -48,9 +48,9 @@ module find_errors(
   assign aw = a;                             // line 10
   assign b = bw;                             // line 11
   assign creg = c;                           // line 12
-always@(aw)                                       // line 13
+always@(c)                                       // line 13
   begin                                      // line 14
-    if (creg == 4'hF)   //creg is all 1s     // line 15
+    if (creg == 6'hF)   //creg is all 1s     // line 15
        bw <= aw;                             // line 16
     else                                     // line 17
      bw <= 4'b0101;
@@ -58,4 +58,3 @@ always@(aw)                                       // line 13
   end                                     // line 19
   // end                               // line 20
 endmodule                                          // line 21
-
