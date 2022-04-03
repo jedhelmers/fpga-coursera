@@ -14,7 +14,7 @@ module ALU (
     decrementB  = 3'b110,
     b = 3'b111;
 
-  always@(A or B) begin
+  always@(A or B or Op_code) begin
     case (Op_code)
       a : Y = A;
       add : Y = A + B;
@@ -24,6 +24,7 @@ module ALU (
       incrementA : Y = A + 1;
       decrementB : Y = B - 1;
       b : Y = B;
+      default : Y=32'bzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz;
     endcase
   end
 endmodule
