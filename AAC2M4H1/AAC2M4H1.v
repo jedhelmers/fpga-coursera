@@ -6,15 +6,15 @@ module ALU (
   always@(A or B or Op_code)
   begin
     case (Op_code)
-      3'b000 : Y = A;
-      3'b001 : Y = A + B;
-      3'b010 : Y = A - B;
-      3'b011 : Y = A & B;
-      3'b100 : Y = A | B;
-      3'b101 : Y = A + 1'b1;
-      3'b110 : Y = B - 1'b1;
-      3'b111 : Y = B;
-      default : Y = {32{1'bz}};
+      3'b000 : Y <= A;
+      3'b001 : Y <= A + B;
+      3'b010 : Y <= A - B;
+      3'b011 : Y <= A & B;
+      3'b100 : Y <= A | B;
+      3'b101 : Y <= A + 1'b1;
+      3'b110 : Y <= A - 1'b1;
+      3'b111 : Y <= B;
+      default : Y <= {32{1'bz}};
     endcase
   end
 endmodule
