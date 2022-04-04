@@ -6,46 +6,34 @@ module FIFO8x9(
   output [8:0] DataOut,
   input rden, wren
 	);
-//signal declarations
 
-	reg [8:0] fifo_array [7:0];
+	reg [8:0] fifo_array[255:0];
 	reg [7:0] wrptr, rdptr;
 	wire [7:0] wr_cnt, rd_cnt;
+  reg[8:0]mem1;
 
+  always@(posedge clk)
+  begin
+    if(rst) mem1 <=9'b000000000;
+    if(RdPtrClr) rdptr <= 0;
+    if(WrPtrClr) wrptr <= 0;
+
+    if(wren)
+    begin
+      fifo_array[wrptr] <= DataIn;
+      wrptr = wrptr + WrInc;
+    end
+
+    if(rden)
+    begin
+      mem1 <=fifo_array[rdptr];
+      rdptr <=rdptr + RdInc;
+    end
+    else
+      mem1 <=9'bzzzzzzzzz;
+  end
+
+  assign DataOut = mem1;
   assign wr_cnt = wrptr;
   assign rd_cnt = rdptr;
-  assign DataOut = rden ? fifo_array[rd_cnt] : 9'bzzzzzzz;
-
-  always @(WrPtrClr) begin
-    wrptr <= 0;
-  end
-
-  always @(RdPtrClr) begin
-    rdptr <= 0;
-  end
-
-  always @(rst) begin
-    rdptr <= 0;
-    wrptr <= 0;
-    for(integer i = 0; i < 256; i = i + 1) begin
-      fifo_array[i] <= 9'b000000000;
-    end
-  end
-
-  always @(posedge clk) begin
-    // when write signal, write to array
-    if(wren) begin
-      fifo_array[wr_cnt] = DataIn;
-      wrptr = wrptr + 1;
-    end
-    else if(rden) begin
-      rdptr = rdptr + 1;
-    end
-  end
 endmodule
-
-
-
-
-
-//
