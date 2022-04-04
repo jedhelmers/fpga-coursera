@@ -39,10 +39,19 @@ module LS161a(
 
   always @(posedge CLK) begin
     else begin
-      if (ENP and ENT) begin
+      if (LOAD_n)
+        rco = CNT[0] & CNT[1] & CNT[2] & CNT[3] + 1'b1;
+      else if (ENP and ENT) begin
         rco = CNT[0] & CNT[1] & CNT[2] & CNT[3] + 1'b1;
         CNT = CNT + 1;
       end
     end
   end
 endmodule
+
+
+
+
+
+
+//
