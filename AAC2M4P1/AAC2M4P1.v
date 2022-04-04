@@ -23,30 +23,25 @@ module LS161a(
     output RCO,
     output [3:0]Q
 );
-  reg [4:0] CNT;
+  reg [3:0] CNT = 4'b0000;
+  reg rco = 0;
 
   assign Q = CNT[3:0];
-
-  assign RCO = CNT[4];
+  assign RCO = rco;
 
   always @(posedge CLK or negedge LOAD_n) begin
     if (!LOAD_n) begin
-      // $display("!LOAD_n: D %d Q %d", D, Q);
       CNT = D;
     end
   end
 
-  always @(posedge CLK or posedge CLR_n) begin
-    if (!CLR_n) begin
-      CNT = 0;
-    end
+  always @(negedge CLR_n) CNT <= 4'b0000;
+
+  always @(posedge CLK) begin
     else begin
-      if (ENP) begin
+      if (ENP and ENT) begin
+        rco = CNT[0] & CNT[1] & CNT[2] & CNT[3] + 1'b1;
         CNT = CNT + 1;
-        // $display("%b", CNT);
-      end
-      if(CNT > 5'b10000) begin
-        CNT = 0;
       end
     end
   end
